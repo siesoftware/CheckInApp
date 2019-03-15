@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 2544,
+  "expoServerNgrokUrl": "https://kh-iss.anonymous.checkinapp.exp.direct",
+  "packagerNgrokUrl": "https://packager.kh-iss.anonymous.checkinapp.exp.direct",
+  "ngrokPid": 1924,
+  "webpackServerPort": null
+}
