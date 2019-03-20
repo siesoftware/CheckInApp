@@ -8,6 +8,7 @@ import {
 import Home from './screens/Home.js';
 import Register from './screens/Register.js';
 import SignatureScreen from './screens/SignatureScreen.js';
+import ScanBarCode from './screens/ScanBarCode.js';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -19,9 +20,16 @@ const AppNavigator = createStackNavigator({
   SignatureScreen: {
     screen: SignatureScreen,
   },
+  ScanBarCode: {
+    screen: ScanBarCode,
+  },
 },
   {
     initialRouteName: 'Home',
+    headerMode: 'none',
+    navigationOptions: {
+        headerVisible: false,
+    },
   });
 
 const AppContainer = createAppContainer(AppNavigator);

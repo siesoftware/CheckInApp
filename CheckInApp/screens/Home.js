@@ -1,26 +1,51 @@
 import React from 'react';
 
-import { Text, ThemeProvider, Image, Button } from 'react-native-elements';
+import { 
+  Text, Image, Button, StyleSheet, View,
+  ImageBackground
+} 
+from 'react-native';
+
+const logoURL = '../assets/logo_metalco_no_bg.png';
+const backgroundImageURL = '../assets/Bg.jpg';
 
 export default class Home extends React.Component {
 
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <ThemeProvider theme={theme}>
-        <Image source={require('../assets/logo_metalco_no_bg.png')}/>
-        <Text>Sistema de registro de ingreso</Text>
-        <Button title="Registro inicial"
-          onPress={() => navigate('Register')}/>
-      </ThemeProvider>
+      <ImageBackground source={require(backgroundImageURL)}
+        style={styles.backgroundImage}>
+        <View style={styles.content}>
+          <Image source={require(logoURL)}/>
+          <Text style={styles.titulo}>Sistema de registro de ingreso</Text>
+          <View style={{height:50}}/>
+          <Button title="Registro inicial"
+            onPress={() => navigate('Register')}/>
+          <View style={{height:20}}/>
+          <Button title="Check-in con QR"
+            onPress={() => navigate('ScanBarCode')}/>
+          <View style={{height:20}}/>
+        </View>
+      </ImageBackground>
     );
   }
 }
-const theme = {
-  Button: {
-    backgroundColor: 'blue',
+const styles = StyleSheet.create({
+  content: {
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center",
   },
-  Text: {
-    fontSize: 18,
-  }
-};
+  titulo: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    height: 25,
+    paddingTop: 1,
+    backgroundColor: '#a50b0b',
+    color: 'white',
+  },
+  backgroundImage: {
+    height: 800,
+  },
+});

@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
-import { Input, Text } from 'react-native-elements';
+import { StyleSheet, View, Image } from 'react-native';
 import Signature from 'react-native-signature-canvas';
  
 export default class SignatureScreen extends React.Component {
@@ -10,13 +9,16 @@ export default class SignatureScreen extends React.Component {
   }
  
   handleSignature = signature => {
-    this.setState({ signature });
+    this.setState({ signature });    
+    this.props.navigation.navigate('Register',
+    {
+      sentSignature : signature
+    });
   };
  
   render() {
     const style = `.m-signature-pad--footer
     .button {
-      background-color: red;
       color: #FFF;
     }`;
     return (
