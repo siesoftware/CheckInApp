@@ -9,6 +9,7 @@ import Home from './screens/Home.js';
 import Register from './screens/Register.js';
 import SignatureScreen from './screens/SignatureScreen.js';
 import ScanBarCode from './screens/ScanBarCode.js';
+import Dialog from './screens/Dialog.js';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -23,6 +24,9 @@ const AppNavigator = createStackNavigator({
   ScanBarCode: {
     screen: ScanBarCode,
   },
+  Dialog: {
+    screen: Dialog,
+  }
 },
   {
     initialRouteName: 'Home',

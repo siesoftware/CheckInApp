@@ -18,13 +18,19 @@ export default class Home extends React.Component {
         style={styles.backgroundImage}>
         <View style={styles.content}>
           <Image source={require(logoURL)}/>
-          <Text style={styles.titulo}>Sistema de registro de ingreso</Text>
+          <View style={styles.titulo}>
+            <Text style={styles.titulolabel}>Sistema de registro de ingreso</Text>
+          </View>          
           <View style={{height:50}}/>
-          <Button title="Registro inicial"
-            onPress={() => navigate('Register')}/>
+          <View style={{width: 250}}>
+            <Button title="Registro inicial"
+              onPress={() => navigate('Register')}/>
+          </View>
           <View style={{height:20}}/>
-          <Button title="Check-in con QR"
-            onPress={() => navigate('ScanBarCode')}/>
+          <View style={{width: 250}}>
+            <Button title="Check-in con QR"
+              onPress={() => navigate('ScanBarCode')}/>
+          </View>
           <View style={{height:20}}/>
         </View>
       </ImageBackground>
@@ -38,11 +44,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   titulo: {
+    backgroundColor: '#a50b0b',    
+    height: 50,
+    justifyContent: "center",
+  },
+  titulolabel: {
     fontWeight: 'bold',
     fontSize: 20,
-    height: 25,
-    paddingTop: 1,
-    backgroundColor: '#a50b0b',
+    paddingLeft: 25,
+    paddingRight: 25,
     color: 'white',
   },
   backgroundImage: {

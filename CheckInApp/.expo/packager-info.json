@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": "https://kh-iss.elsamplio.checkinapp.exp.direct",
-  "packagerNgrokUrl": "https://packager.kh-iss.elsamplio.checkinapp.exp.direct",
-  "ngrokPid": 2632,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 13248,
+  "expoServerNgrokUrl": "https://kh-iss.anonymous.checkinapp.exp.direct",
+  "packagerNgrokUrl": "https://packager.kh-iss.anonymous.checkinapp.exp.direct",
+  "ngrokPid": 14392,
   "webpackServerPort": null
 }

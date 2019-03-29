@@ -1,61 +1,129 @@
 import React from 'react';
-import { Input, Header, Button,
+import {
+    Input, Header, Button, Overlay
 } from 'react-native-elements';
 import {
-    KeyboardAvoidingView, StyleSheet, View, Platform,
-    StatusBar, ScrollView, Text, Image
+    KeyboardAvoidingView, StyleSheet, View,
+    StatusBar, ScrollView, Text, Image, Modal,
 } from 'react-native';
 
 import { FileSystem } from 'expo';
 
+import Dialog from './Dialog';
+
 export default class Register extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            eps:'cfs',
-            arl:'',
+        this.state = {
+            nombres: '',
+            numeroDocumento: '',
+            eps: '',
+            arl: '',
+            contactoEmergencia: '',
+            numeroTelefono: '',
+            empresaPertenece: '',
+            motivoVisita: '',
+            personaAtiende: '',
+            receivedSignature: null,
+            alertVisible: false,
+            alertMessage: 'Default message',
+        };
+        this.saveButton = this.saveButton.bind(this);
+    }
+
+    async componentDidMount() {
+        var fileUri = FileSystem.documentDirectory + 'checkindata.json';
+        let res = await FileSystem.getInfoAsync(fileUri);
+        if (res.exists) {
+            let content = await FileSystem.readAsStringAsync(fileUri);
+            var contentJson = JSON.parse(content);
+            this.setState(contentJson);
         }
     }
 
-    render(){
+    async saveButton() {
+        var tags = require('../constants/etiquetas.js');
+        var estado = this.state;
+        var valido = true;
+        const fileUri = FileSystem.documentDirectory + 'checkindata.json';        
+        //let message = '';
+        Object.keys(this.state).forEach(function (key) {
+            if (key != 'alertVisible' && (estado[key] == '' || estado[key] == null)) {
+                //message = 'EL CAMPO ' + tags.TAGS_REGISTER[key] + ' ES REQUERIDO';
+                valido = false;
+            }
+        }
+        );
+        if (valido) {
+            var contents = JSON.stringify(this.state);
+            await FileSystem.writeAsStringAsync(fileUri, contents);
+            //message = 'Se ha guardado su información correctamente';
+        }
+        //this.setState({alertVisible:true, alertMessage:message});
+    }
+
+    render() {
         const { navigation } = this.props;
-        const receivedSignature = navigation.getParam('sentSignature', null);
-        const baseDir = FileSystem.documentDirectory;
-        return(
+        var firma = navigation.getParam('sentSignature', null);
+        if (firma != null) {
+            this.state.receivedSignature = firma;
+        }
+        var tags = require('../constants/etiquetas.js');
+        return (
             <View style={styles.container}>
                 <StatusBar barStyle="light-content" />
                 <KeyboardAvoidingView behavior="padding" style={styles.form}>
                     <Header
                         placement="center"
-                        centerComponent={{ text: 'REGISTRO DE USUARIO', style: { color: '#fff' } }}
-                        />
+                        centerComponent={{ text: 'REGISTRO DE USUARIO', style: { color: '#fff' } }}/>
                     <ScrollView>
-                        <Input placeholder='NOMBRES Y APELLIDOS'/>
-                        <Input placeholder='NÚMERO DE DOCUMENTO'/>
-                        <Input placeholder='EPS'/>
-                        <Input placeholder='ARL'/>
-                        <Input placeholder='CONTACTO EN CASO DE EMERGENCIA' />
-                        <Input placeholder='NÚMERO DE TELÉFONO' 
-                            keyboardType='phone-pad'/>
-                        <Input placeholder='EMPRESA A LA QUE PERTENECE' />
-                        <Input placeholder='MOTIVO DE LA VISITA' />
-                        <Input placeholder='PERSONA QUIEN ATIENDE' />
-                        <View style={{height:10}}/>
-                        <Button title="Registrar Firma"
-                            onPress={() => this.props.navigation.navigate('SignatureScreen')}/>
-                        <View style={{height:10}}/>
+                        <Dialog alertVisible={this.state.alertVisible}
+                            alertMessage={this.state.alertMessage}
+                            navigation={this.props.navigation}/>
+                        <Input placeholder={tags.TAGS_REGISTER.nombres}
+                            onChangeText={(text) => this.setState({ nombres: text })}
+                            value={this.state.nombres} />
+                        <Input placeholder={tags.TAGS_REGISTER.numeroDocumento}
+                            onChangeText={(text) => this.setState({ numeroDocumento: text })}
+                            value={this.state.numeroDocumento} />
+                        <Input placeholder={tags.TAGS_REGISTER.eps}
+                            onChangeText={(text) => this.setState({ eps: text })}
+                            value={this.state.eps} />
+                        <Input placeholder={tags.TAGS_REGISTER.arl}
+                            onChangeText={(text) => this.setState({ arl: text })}
+                            value={this.state.arl} />
+                        <Input placeholder={tags.TAGS_REGISTER.contactoEmergencia}
+                            onChangeText={(text) => this.setState({ contactoEmergencia: text })}
+                            value={this.state.contactoEmergencia} />
+                        <Input placeholder={tags.TAGS_REGISTER.numeroTelefono}
+                            keyboardType='phone-pad'
+                            onChangeText={(text) => this.setState({ numeroTelefono: text })}
+                            value={this.state.numeroTelefono} />
+                        <Input placeholder={tags.TAGS_REGISTER.empresaPertenece}
+                            onChangeText={(text) => this.setState({ empresaPertenece: text })}
+                            value={this.state.empresaPertenece} />
+                        <Input placeholder={tags.TAGS_REGISTER.motivoVisita}
+                            onChangeText={(text) => this.setState({ motivoVisita: text })}
+                            value={this.state.motivoVisita} />
+                        <Input placeholder={tags.TAGS_REGISTER.personaAtiende}
+                            onChangeText={(text) => this.setState({ personaAtiende: text })}
+                            value={this.state.personaAtiende} />
+                        <View style={{ height: 10 }} />
+                        <Button title={tags.TAGS_REGISTER.receivedSignature}
+                            onPress={() => this.props.navigation.navigate('SignatureScreen')} />
+                        <View style={{ height: 10 }} />
                         <View style={styles.preview}>
-                        {receivedSignature ? (
-                            <Image
-                            resizeMode={"contain"}
-                            style={{ width: 335, height: 114 }}
-                            source={{ uri: receivedSignature}}
-                            />
-                        ) : null}
+                            {this.state.receivedSignature ? (
+                                <Image
+                                    resizeMode={"contain"}
+                                    style={{ width: 335, height: 114 }}
+                                    source={{ uri: this.state.receivedSignature }}
+                                />
+                            ) : null}
                         </View>
-                        <Text>{baseDir}</Text>
-                        <Button title="Guardar datos"/>
+                        <Button title="Guardar datos"
+                            onPress={this.saveButton} />
                     </ScrollView>
                 </KeyboardAvoidingView>
             </View>
@@ -78,5 +146,21 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 15
+    },
+    modal: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    modaltitle: {
+        height: 50, 
+        backgroundColor: '#a50b0b',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    titulolabel: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: 'white',
     },
 })
