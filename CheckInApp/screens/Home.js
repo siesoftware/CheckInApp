@@ -1,10 +1,14 @@
 import React from 'react';
 
 import { 
-  Text, Image, Button, StyleSheet, View,
-  ImageBackground
+  Text, Image, StyleSheet, View,
+  ImageBackground, Alert
 } 
 from 'react-native';
+
+import { Button} from 'react-native-elements';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const logoURL = '../assets/logo_metalco_no_bg.png';
 const backgroundImageURL = '../assets/Bg.jpg';
@@ -31,7 +35,19 @@ export default class Home extends React.Component {
             <Button title="Check-in con QR"
               onPress={() => navigate('ScanBarCode')}/>
           </View>
-          <View style={{height:20}}/>
+          <View style={{height:50}}/>
+          <View>
+            <Button
+                icon={
+                  <Icon
+                    name="info-circle"
+                    size={15}
+                    color="white"
+                  />
+                }
+                onPress={() => Alert.alert('CheckInApp By SIE Software, v0.3')}
+              />
+          </View>
         </View>
       </ImageBackground>
     );

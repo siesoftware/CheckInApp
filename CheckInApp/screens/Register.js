@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    Input, Header, Button, Overlay
+    Input, Header, Button,
 } from 'react-native-elements';
 import {
     KeyboardAvoidingView, StyleSheet, View,
-    StatusBar, ScrollView, Text, Image, Modal,
+    StatusBar, ScrollView, Image,
 } from 'react-native';
 
 import { FileSystem } from 'expo';
@@ -30,6 +30,7 @@ export default class Register extends React.Component {
             alertMessage: 'Default message',
         };
         this.saveButton = this.saveButton.bind(this);
+        this.onPressDialogButton = this.onPressDialogButton.bind(this);
     }
 
     async componentDidMount() {
@@ -40,6 +41,7 @@ export default class Register extends React.Component {
             var contentJson = JSON.parse(content);
             this.setState(contentJson);
         }
+        this.setState({alertVisible:false,alertMessage:'desde el componentdidmount'})
     }
 
     async saveButton() {
@@ -47,10 +49,10 @@ export default class Register extends React.Component {
         var estado = this.state;
         var valido = true;
         const fileUri = FileSystem.documentDirectory + 'checkindata.json';        
-        //let message = '';
+        let message = '';
         Object.keys(this.state).forEach(function (key) {
             if (key != 'alertVisible' && (estado[key] == '' || estado[key] == null)) {
-                //message = 'EL CAMPO ' + tags.TAGS_REGISTER[key] + ' ES REQUERIDO';
+                message = tags.TAGS_REGISTER.messageErrorPre + tags.TAGS_REGISTER[key] + tags.TAGS_REGISTER.messageErrorPost;
                 valido = false;
             }
         }
@@ -58,9 +60,18 @@ export default class Register extends React.Component {
         if (valido) {
             var contents = JSON.stringify(this.state);
             await FileSystem.writeAsStringAsync(fileUri, contents);
-            //message = 'Se ha guardado su información correctamente';
+            message = tags.TAGS_REGISTER.messageSuccess;
         }
-        //this.setState({alertVisible:true, alertMessage:message});
+        this.setState({alertVisible:true, alertMessage:message});
+    }
+
+    onPressDialogButton(){
+        var tags = require('../constants/etiquetas.js');
+        if(this.state.alertMessage==tags.TAGS_REGISTER.messageSuccess){
+            this.props.navigation.navigate('Home');
+        }else{
+            this.setState({alertVisible:false});
+        }
     }
 
     render() {
@@ -80,7 +91,8 @@ export default class Register extends React.Component {
                     <ScrollView>
                         <Dialog alertVisible={this.state.alertVisible}
                             alertMessage={this.state.alertMessage}
-                            navigation={this.props.navigation}/>
+                            navigation={this.props.navigation}
+                            buttonAction={this.onPressDialogButton}/>
                         <Input placeholder={tags.TAGS_REGISTER.nombres}
                             onChangeText={(text) => this.setState({ nombres: text })}
                             value={this.state.nombres} />

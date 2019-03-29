@@ -22,10 +22,8 @@ export default class Dialog extends React.Component{
                         <Text>{this.props.alertMessage}</Text>
                     </View>
                     <View>
-                        <Button title='Cerrar'
-                            onPress={() => this.props.navigation.navigate('Home')}>
-                            <Text>Cerrar</Text>
-                        </Button>
+                        <Button title='Aceptar'
+                            onPress={this.props.buttonAction}/>
                     </View>
                 </View>
             </Overlay>
